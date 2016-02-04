@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en" data-ng-app="friendsapp">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Angular :: Day 1</title>
+
+    <link rel="stylesheet" href="css/bootstrap3.3.6.min.css" />
+    <link rel="stylesheet" href="css/global.css" />
+</head>
+
+<body>
+
+    <!--Top fixed tool bar-->
+    
+     <data-ng-include src="'templates/tpl-top-navigation.html'"></data-ng-include>   
+    
+    <!--End of fixed tool bar-->
+    
+
+    <div class="container" data-ng-controller="FriendsListingCtrl as fl">
+
+        <!--Main content starts -->
+        
+        <div class="row">
+            <div class="col-md-2 col-md-offset-10">
+                <button class="btn btn-primary" data-ng-click="fl.toogleListing();">Back</button>
+            </div>
+        </div>
+        
+        <div class="fri-list" data-ng-show="fl.showLising">
+            
+            <div class="row">
+                <div class="col-md-10">
+                    
+                    <h3>Friends List</h3>
+                    
+                    <table class="table  table-hover">
+                        <thead>
+                            <tr>
+                                <th>Frist Name</th>
+                                <th>Last Name</th>
+                                <th>Email</th>
+                                <th>Country</th>
+                                <th>Reporting Manager</th>
+                                <th>Desk Phone</th>
+                                <th>Mobile</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr data-ng-repeat="friend in fl.friendsList as allFriends track by $index">
+                                <td data-ng-bind="friend.firstname"></td>
+                                <td data-ng-bind="friend.lastname"></td>
+                                <td data-ng-bind="friend.email"></td>
+                                <td data-ng-bind="friend.country.label|uppercase"></td>
+                                <td data-ng-bind="friend.rm"></td>
+                                <td data-ng-bind="friend.desk"></td>
+                                <td data-ng-bind="friend.mobile"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                  
+                    <div class="padTop15" data-ng-show="allFriends.length === 0">
+                        <div class="alert alert-danger">
+                            No records found.
+                        </div>
+                    </div>
+                    
+                    <div class="padTop15">
+                        <button class="btn btn-danger" 
+                                data-ng-click="fl.clearAll();"> Clear All </button>
+                    </div>
+                    
+                </div>
+            </div>
+            
+        </div>
+        
+        <div class="fri-add" data-ng-show="fl.showForm">
+
+        <h3>Add Friend</h3>
+
+        <div class="alert" data-ng-class="{
+                            'alert-success' : fl.message.success, 
+                            'alert-danger' : !fl.message.success
+                            }" 
+             role="alert" data-ng-show="fl.message.text != ''">
+            
+            {{ fl.message.text }}
+        </div>
+
+        <form role="form" data-ng-submit="fl.formSubmit();">
+            <div class="row">
+        
+                      <div class="col-md-4">
+                                
+                        <div class="form-group">
+                            <label for="txtFirstName">First Name</label>
+                            <input type="text" 
+                                    class="form-control" 
+                                    id="txtFirstName" 
+                                    placeholder="Please enter first name" 
+                                    data-ng-model="fl.friendData.firstname" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="txtLastName">Last Name</label>
+                            <input type="text" 
+                                    class="form-control" 
+                                    id="txtLastName" 
+                                    placeholder="Please enter last name" 
+                                    data-ng-model="fl.friendData.lastname">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="txtEmail">Email</label>
+                            <input type="email" 
+                                    class="form-control" 
+                                    id="txtEmail" 
+                                    placeholder="Please enter email" 
+                                    data-ng-model="fl.friendData.email">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="selCountry">Country</label>
+                            <select class="form-control" 
+                                    data-ng-model="fl.friendData.country"   
+                                    name="selCountry" 
+                                    id="selCountry" 
+                                    data-ng-options="item as item.label for item in 
+                                                    fl.countriesList|orderBy:'label':true track by item.code">
+                                <option value="">[-- select country --]</option>
+                            </select>
+                        </div>    
+                        
+                      </div>
+                      
+                       <div class="col-md-4">
+                           
+                             <div class="form-group">
+                                <label for="txtRm">Reporting Manager</label>
+                                <input type="text" 
+                                        class="form-control" 
+                                        id="txtRm" 
+                                        placeholder="Please enter your reporting manager name" data-ng-model="fl.friendData.rm">
+                            </div>
+                           
+                            <div class="form-group">
+                                <label for="txtDesk">Desk Phone</label>
+                                <input type="text" 
+                                        class="form-control" 
+                                        id="txtDesk" 
+                                        placeholder="Please enter your desk phone" 
+                                        data-ng-model="fl.friendData.desk">
+                            </div>
+                        
+                            <div class="form-group">
+                                <label for="txtMobile">Mobile</label>
+                                <input type="text" 
+                                        class="form-control" 
+                                        id="txtMobile" 
+                                        placeholder="Please enter your mobile" 
+                                        data-ng-model="fl.friendData.mobile">
+                            </div>
+
+                            <div class="checkbox">
+                                <label>
+                                    <input  type="checkbox" 
+                                            data-ng-model="fl.friendData.isAgreed"> 
+                                    Agree our terms & conditions </label>
+                            </div>
+                           
+                       </div>
+                </div>
+        
+        
+        
+        <div class="padTop15">
+            
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3">
+                    <button type="submit" 
+                            class="btn btn-primary">Submit</button>
+                    <button type="reset" class="btn btn-default">Cancel</button>
+                </div> 
+            </div>
+            
+        </div>
+        
+      </form>  
+   
+  </div>
+                
+        <!--End of main contents-->
+
+    </div>
+
+    <!-- Angularjs referance -->
+    <script src="scripts/angular1.4.9.min.js"></script>
+    <script src="scripts/angular.local.storeage0.2.3.min.js"></script>
+    <script src="scripts/angular.randomstrings.js"></script>
+
+    <!--Friends application related scripts-->
+    <script src="app/friends.module.js"></script>
+
+    <script src="app/friends-listing.controller.js"></script>
+    <script src="app/friends.factory.js"></script>
+
+</body>
+
+</html>

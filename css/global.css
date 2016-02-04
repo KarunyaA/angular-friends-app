@@ -1,0 +1,11 @@
+/* global styles goes here */
+
+body { padding-top: 70px; }
+
+
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
+}
+
+.padTop10{ padding-top: 10px; }
+.padTop15{ padding-top: 15px; }
